@@ -31,3 +31,25 @@ presentation/
 - Use immutable models.
 - Dispose streams properly.
 - Handle async errors explicitly.
+
+---
+
+## UI/UX Compliance Policy
+
+All UI implementation must strictly follow the approved Figma design.
+
+Requirements:
+
+- Match layout hierarchy.
+- Match typography scale.
+- Match color tokens.
+- Match border radius.
+- Match spacing system.
+- Implement all interaction states.
+
+No visual improvisation allowed.
+
+If design conflict occurs:
+
+- Pause implementation.
+- Request clarification via ARCHITECT or PM agent.
