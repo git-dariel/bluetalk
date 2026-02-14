@@ -1,16 +1,32 @@
-# bluetalk
+# BlueTalk
 
-A new Flutter project.
+BlueTalk is a Bluetooth Low Energy (BLE) peer-to-peer messaging app built with Flutter. It focuses on secure, offline-first communication using encrypted sessions and clean architecture boundaries.
 
-## Getting Started
+## Highlights
 
-This project is a starting point for a Flutter application.
+- Encrypted messaging with AES-GCM
+- Ephemeral session keys derived via ECDH
+- Offline-first BLE communication
+- Clean Architecture separation of concerns
+- Battery-aware BLE scanning and connection handling
 
-A few resources to get you started if this is your first Flutter project:
+## Documentation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Architecture and engineering rules are in [.orchestration/README.md](.orchestration/README.md) and [.orchestration/ARCHITECTURE.md](.orchestration/ARCHITECTURE.md).
+- Security specifications are in [.orchestration/security/PROTOCOL.md](.orchestration/security/PROTOCOL.md) and [.orchestration/security/THREAT_MODEL.md](.orchestration/security/THREAT_MODEL.md).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Requirements
+
+- Flutter SDK (stable channel)
+- Platform toolchains for Android and iOS
+
+## Quick Start
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Status
+
+Active development. Protocols and security hardening are evolving.
