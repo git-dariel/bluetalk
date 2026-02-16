@@ -38,3 +38,9 @@ Every feature must include:
 - Power impact analysis
 - Security analysis
 - BLE failure handling plan
+
+## Current Assigned Backlog
+
+- Sequence foundation work: protocol definitions, handshake, encryption, messaging.
+- Maintain dependency order: handshake and encryption before full messaging rollout.
+- Produce per-feature implementation slices for domain, application, infrastructure, and presentation.

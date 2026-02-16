@@ -43,6 +43,12 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Bluetalk uses Bluetooth to discover nearby users and exchange messages securely.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Bluetalk uses Bluetooth to discover nearby users and exchange messages securely.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Bluetalk needs location permission on some devices to scan nearby Bluetooth users.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>

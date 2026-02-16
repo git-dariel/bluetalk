@@ -1,23 +1,47 @@
-# BlueTalk Architecture (Flutter + BLE)
+# BlueTalk Architecture (Flutter + Nearby Connections)
 
 ## System Type
 
-Offline-first BLE encrypted messaging system.
+Offline-first Bluetooth peer-to-peer messaging system.
 
-## Communication Protocol
+## Communication Layer
 
-Service UUID:
-BlueTalk Primary Service
+Transport: Google Nearby Connections API (P2P_CLUSTER strategy)
+Service ID: `com.bluetalk.nearby`
 
-Characteristics:
+Nearby Connections automatically selects the best available transport:
 
-- Handshake Characteristic
-- Message Characteristic
-- Acknowledgment Characteristic
+1. BLE — discovery (finding nearby devices)
+2. Bluetooth Classic — data transfer (sending messages)
+3. WiFi Direct — optional, used for faster/larger transfers
+
+Previous BLE GATT approach (Service UUID, Characteristic UUIDs) was replaced
+due to fragmentation, MTU, and GATT server/client complexity issues.
 
 ---
 
-## Secure Handshake Flow
+## Application Layers
+
+### Infrastructure Layer
+
+- `NearbyConnectionsChatService` — advertising, discovery, connection, payload messaging
+- `BluetoothPermissionService` — runtime permission requests (BLE, location, WiFi)
+- Cryptographic services (ECDH, AES-GCM, HKDF) — available for re-integration
+
+### Presentation Layer
+
+- `ShellController` — app state, scan toggle, thread/message management
+- `AppFlowController` — landing → permission → shell navigation
+- Screens and tabs: HomeTab, MessagesTab, SettingsTab, ChatDetailScreen
+
+### Domain Layer (Flutter-independent)
+
+- Entities: Session, EncryptedMessagePacket, HandshakeModels
+- Repository interfaces: BluetoothRepository, CryptoRepository, SessionStore
+
+---
+
+## Secure Handshake Flow (Available for re-integration)
 
 1. Device A connects to Device B
 2. Exchange public keys (ECDH)
@@ -27,33 +51,31 @@ Characteristics:
 
 ---
 
-## Message Packet Structure
+## Message Flow (Current)
 
-{
-sessionId: UUID,
-timestamp: int,
-nonce: bytes,
-cipherText: bytes,
-mac: bytes
-}
+1. Device A discovers Device B via Nearby Connections
+2. User taps to connect → auto-accepted on both sides
+3. Chat thread auto-created
+4. Messages sent as JSON byte payloads via `sendBytesPayload()`
+5. Received via `onPayLoadRecieved` callback → routed to correct thread
 
 ---
 
 ## Risk Considerations
 
-- BLE MTU size limitation
-- Packet fragmentation
-- OS background restrictions
-- Permission denial
-- MITM attacks
-- Battery drain from continuous scanning
+- Permission denial on Android 12+ (BLE, Location, Nearby WiFi)
+- OS background restrictions on scanning/advertising
+- Battery drain from continuous advertising
+- Connection drops during message transfer
+- Multi-device collision in P2P_CLUSTER
 
 ---
 
 ## Future Evolution
 
+- Re-integrate AES-GCM encryption on Nearby Connections payload
 - Mesh relay system
 - Multi-peer group chat
 - QR code secure pairing
-- Ephemeral session mode
-- Secure file transfer
+- Secure file transfer via FILE payload
+- Chat history persistence (SQLite/Hive)

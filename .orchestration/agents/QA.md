@@ -34,3 +34,9 @@ All failures must return structured error states.
 - Reject invalid packet type
 
 Failure in any test blocks merge.
+
+## Current Assigned Backlog
+
+- Validate replay, invalid key, corrupted ciphertext, and forced-disconnect scenarios.
+- Validate session expiration and timeout behavior.
+- Verify all failures return structured error states.

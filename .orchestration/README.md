@@ -1,21 +1,24 @@
 # BlueTalk AI Orchestration System (Flutter Edition)
 
-BlueTalk is a Bluetooth Low Energy (BLE) peer-to-peer encrypted messaging application built with:
+BlueTalk is a Bluetooth peer-to-peer messaging application built with:
 
 - Flutter (Dart)
-- flutter_reactive_ble
+- Google Nearby Connections API (`nearby_connections`)
 - Clean Architecture
-- AES-GCM encryption
-- ECDH key exchange
+- AES-GCM encryption (available for re-integration)
+- ECDH key exchange (available for re-integration)
+
+Transport layer uses Nearby Connections for discovery, connection, and
+messaging over BLE + Bluetooth Classic (with optional WiFi Direct upgrade).
 
 This AI orchestration layer governs development to ensure:
 
 - Strict architectural boundaries
-- Secure BLE communication
-- Cryptographic enforcement
+- Secure Bluetooth communication
+- Cryptographic enforcement (planned re-integration)
 - Offline-first reliability
 - Battery-aware operation
 
 No feature bypasses architectural review.
-No BLE logic is written outside infrastructure layer.
-No message is sent unencrypted.
+No Bluetooth logic is written outside infrastructure layer.
+No business logic exists inside UI widgets.

@@ -15,3 +15,9 @@ Reject if:
 - BLE adapter accessed directly from UI
 - Encryption bypassed
 - Hardcoded device identifiers
+
+## Current Assigned Backlog
+
+- Enforce architecture boundaries for all TODO implementations.
+- Verify encryption is mandatory before send/receive flows.
+- Verify timeout/disconnect handling and stream lifecycle cleanup.

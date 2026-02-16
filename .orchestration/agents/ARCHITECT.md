@@ -77,3 +77,10 @@ All handshake logic must follow:
 7. Session expiration enforced.
 
 Any deviation requires Architect approval.
+
+## Current Assigned Backlog
+
+- Approve BLE service and characteristic UUID definitions.
+- Approve handshake design: ECDH P-256, HKDF-SHA256, HMAC session confirmation.
+- Approve encryption governance: AES-GCM, unique nonce policy, in-memory key storage.
+- Define phase-2 MITM hardening approach using identity keys and signatures.
