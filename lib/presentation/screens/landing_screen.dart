@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../design/tokens.dart';
 import '../widgets/glass_action_button.dart';
@@ -40,13 +39,13 @@ class LandingScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(30, 80, 30, 30),
               child: Column(
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'bluetalk.',
-                    style: GoogleFonts.imFellEnglish(
+                    style: TextStyle(
+                      fontFamily: 'IMFellEnglish',
                       fontSize: 80,
                       fontStyle: FontStyle.italic,
                       color: BlueTalkColors.primaryText,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const Text(
@@ -66,7 +65,8 @@ class LandingScreen extends StatelessWidget {
                       blurSigma: 32,
                       topGlassOpacity: 0.0,
                       shadowOpacity: 0.0,
-                      textStyle: GoogleFonts.imFellEnglish(
+                      textStyle: const TextStyle(
+                        fontFamily: 'IMFellEnglish',
                         fontSize: 38,
                         fontStyle: FontStyle.italic,
                         color: Colors.white,

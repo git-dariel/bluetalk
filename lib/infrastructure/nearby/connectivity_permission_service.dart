@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
 
-class BluetoothPermissionService {
-  Future<bool> requestBluetoothPermissions() async {
+class ConnectivityPermissionService {
+  Future<bool> requestConnectivityPermissions() async {
     if (!(Platform.isAndroid || Platform.isIOS)) {
       return true;
     }

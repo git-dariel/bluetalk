@@ -8,7 +8,7 @@ Version: 1.0
 
 ---
 
-BlueTalk enables encrypted BLE communication between nearby devices.
+BlueTalk enables nearby communication between nearby devices, with encrypted transport as the target state.
 
 Assets to Protect:
 
@@ -23,7 +23,7 @@ Assets to Protect:
 
 ---
 
-- BLE radio channel
+- Nearby transport channel (discovery + data)
 - Handshake phase
 - Message transmission
 - Session storage
@@ -36,7 +36,7 @@ Assets to Protect:
 ---
 
 1. Passive Eavesdropper
-   - Can sniff BLE packets
+   - Can sniff wireless packets
    - Cannot modify packets
 
 2. Active Attacker
@@ -107,7 +107,7 @@ MITIGATION:
 ---
 
 THREAT: Resource Exhaustion
-RISK: BLE spam or handshake flooding
+RISK: discovery spam or handshake flooding
 MITIGATION:
 
 - Rate limiting handshake attempts
@@ -132,10 +132,12 @@ MITIGATION:
 
 Current Level:
 
-- Confidential against passive attacker
-- Resistant to replay
-- Partial MITM protection
+- Real-time nearby transport operational
+- Security hardening in progress
+- Encrypted transport not yet enforced end-to-end
 
 Future Upgrade:
 
+- Confidential transport via AES-GCM
+- Replay resistance via nonce tracking
 - Full MITM resistance via identity signing

@@ -10,13 +10,51 @@ import 'about_screen.dart';
 import 'chat_detail_screen.dart';
 import 'gallery_screen.dart';
 
-class MainShellScreen extends StatelessWidget {
+class MainShellScreen extends StatefulWidget {
   const MainShellScreen({
     super.key,
     required this.controller,
   });
 
   final ShellController controller;
+
+  @override
+  State<MainShellScreen> createState() => _MainShellScreenState();
+}
+
+class _MainShellScreenState extends State<MainShellScreen> {
+  ShellController get controller => widget.controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.onPeerConnected = _onPeerConnected;
+  }
+
+  @override
+  void dispose() {
+    controller.onPeerConnected = null;
+    super.dispose();
+  }
+
+  void _onPeerConnected(String peerName) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Connected to $peerName — say hi! 👋'),
+        backgroundColor: const Color(0xFF2C3E2D),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+        duration: const Duration(seconds: 4),
+        action: SnackBarAction(
+          label: 'Go to Messages',
+          textColor: const Color(0xFFADC9A3),
+          onPressed: () => controller.setTab(1),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

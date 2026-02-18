@@ -21,9 +21,9 @@ Application:
 
 Infrastructure:
 
-- Implement BLE write characteristic
+- Implement Nearby payload send/receive flow
 - Integrate encryption engine
-- Handle packet fragmentation
+- Handle payload chunking when needed
 
 Presentation:
 
@@ -37,7 +37,7 @@ Every feature must include:
 
 - Power impact analysis
 - Security analysis
-- BLE failure handling plan
+- transport failure handling plan
 
 ## Current Assigned Backlog
 

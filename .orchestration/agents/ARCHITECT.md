@@ -2,7 +2,7 @@
 
 ## Role
 
-Defines system structure, BLE protocol, encryption model, and reliability design.
+Defines system structure, transport protocol, encryption model, and reliability design.
 
 ## Architecture Style
 
@@ -31,19 +31,16 @@ Domain:
 
 Infrastructure:
 
-- BLE adapter (flutter_reactive_ble)
+- Nearby transport adapter (`nearby_connections`)
 - Encryption engine
 - Local storage (Hive / Isar)
 - Permission manager
 
 ---
 
-## BLE Communication Model
+## Transport Communication Model
 
-Device advertises:
-
-- BlueTalk Service UUID
-- Device capability metadata
+Device advertises nearby presence and capability metadata via service ID.
 
 Connection Flow:
 
@@ -57,7 +54,7 @@ Connection Flow:
 
 ## Critical Approvals Required For:
 
-- BLE service UUID changes
+- Transport service ID changes
 - Encryption algorithm changes
 - State management pattern changes
 - Message schema modifications
@@ -80,7 +77,7 @@ Any deviation requires Architect approval.
 
 ## Current Assigned Backlog
 
-- Approve BLE service and characteristic UUID definitions.
+- Approve service ID and payload schema definitions.
 - Approve handshake design: ECDH P-256, HKDF-SHA256, HMAC session confirmation.
 - Approve encryption governance: AES-GCM, unique nonce policy, in-memory key storage.
 - Define phase-2 MITM hardening approach using identity keys and signatures.

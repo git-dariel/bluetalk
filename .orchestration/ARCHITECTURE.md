@@ -11,12 +11,12 @@ Service ID: `com.bluetalk.nearby`
 
 Nearby Connections automatically selects the best available transport:
 
-1. BLE — discovery (finding nearby devices)
-2. Bluetooth Classic — data transfer (sending messages)
+1. Nearby discovery channel — finding nearby devices
+2. Bluetooth channel — message data transfer
 3. WiFi Direct — optional, used for faster/larger transfers
 
-Previous BLE GATT approach (Service UUID, Characteristic UUIDs) was replaced
-due to fragmentation, MTU, and GATT server/client complexity issues.
+Previous low-level transport approach was replaced
+due to fragmentation, MTU, and implementation complexity issues.
 
 ---
 
@@ -25,8 +25,8 @@ due to fragmentation, MTU, and GATT server/client complexity issues.
 ### Infrastructure Layer
 
 - `NearbyConnectionsChatService` — advertising, discovery, connection, payload messaging
-- `BluetoothPermissionService` — runtime permission requests (BLE, location, WiFi)
-- Cryptographic services (ECDH, AES-GCM, HKDF) — available for re-integration
+- `BluetoothPermissionService` — runtime permission requests (Bluetooth, location, WiFi)
+- Cryptographic services (ECDH, AES-GCM, HKDF) — implemented and awaiting transport re-integration
 
 ### Presentation Layer
 
@@ -41,7 +41,7 @@ due to fragmentation, MTU, and GATT server/client complexity issues.
 
 ---
 
-## Secure Handshake Flow (Available for re-integration)
+## Secure Handshake Flow (Target Re-Integration)
 
 1. Device A connects to Device B
 2. Exchange public keys (ECDH)
@@ -56,14 +56,14 @@ due to fragmentation, MTU, and GATT server/client complexity issues.
 1. Device A discovers Device B via Nearby Connections
 2. User taps to connect → auto-accepted on both sides
 3. Chat thread auto-created
-4. Messages sent as JSON byte payloads via `sendBytesPayload()`
+4. Messages sent as JSON byte payloads via `sendBytesPayload()` (currently non-E2E)
 5. Received via `onPayLoadRecieved` callback → routed to correct thread
 
 ---
 
 ## Risk Considerations
 
-- Permission denial on Android 12+ (BLE, Location, Nearby WiFi)
+- Permission denial on Android 12+ (Bluetooth, Location, Nearby WiFi)
 - OS background restrictions on scanning/advertising
 - Battery drain from continuous advertising
 - Connection drops during message transfer
@@ -73,7 +73,7 @@ due to fragmentation, MTU, and GATT server/client complexity issues.
 
 ## Future Evolution
 
-- Re-integrate AES-GCM encryption on Nearby Connections payload
+- Re-integrate AES-GCM end-to-end encryption on Nearby Connections payload
 - Mesh relay system
 - Multi-peer group chat
 - QR code secure pairing

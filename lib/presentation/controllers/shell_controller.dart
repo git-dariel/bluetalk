@@ -2,18 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../infrastructure/ble/bluetooth_permission_service.dart';
+import '../../infrastructure/nearby/connectivity_permission_service.dart';
 import '../../infrastructure/nearby/nearby_connections_chat_service.dart';
 import '../models/chat_models.dart';
 
 class ShellController extends ChangeNotifier {
   ShellController({
-    required BluetoothPermissionService permissionService,
+    required ConnectivityPermissionService permissionService,
     required NearbyConnectionsChatService chatService,
   })  : _permissionService = permissionService,
         _chatService = chatService;
 
-  final BluetoothPermissionService _permissionService;
+  final ConnectivityPermissionService _permissionService;
   final NearbyConnectionsChatService _chatService;
 
   int _tabIndex = 0;
@@ -22,9 +22,15 @@ class ShellController extends ChangeNotifier {
   String? _activeThreadName;
   String? _statusMessage;
 
+  /// Called when a new peer successfully connects. Provides the peer's name.
+  void Function(String peerName)? onPeerConnected;
+
   final List<NearbyUser> _nearbyUsers = <NearbyUser>[];
   final Map<String, List<ChatMessage>> _messagesByThread =
       <String, List<ChatMessage>>{};
+
+  /// Endpoint IDs currently awaiting a connection handshake.
+  final Set<String> _connectingEndpointIds = <String>{};
 
   /// Maps thread name to Nearby Connections endpoint ID.
   final Map<String, String> _threadEndpointMap = <String, String>{};
@@ -65,7 +71,8 @@ class ShellController extends ChangeNotifier {
   }
 
   Future<bool> requestPermissionAndStart() async {
-    final bool granted = await _permissionService.requestBluetoothPermissions();
+    final bool granted =
+        await _permissionService.requestConnectivityPermissions();
     if (!granted) {
       _statusMessage = 'Bluetooth permission denied.';
       notifyListeners();
@@ -145,18 +152,20 @@ class ShellController extends ChangeNotifier {
 
   /// Connect to a discovered peer and open a chat thread.
   Future<void> connectToUser(NearbyUser user) async {
-    if (user.isConnected) {
+    if (user.isConnected || _connectingEndpointIds.contains(user.endpointId)) {
       return;
     }
 
+    _connectingEndpointIds.add(user.endpointId);
+    _refreshNearbyList();
+
     try {
       await _chatService.connectToPeer(user.endpointId);
-      _statusMessage = 'Connecting to ${user.name}...';
-      notifyListeners();
     } catch (_) {
+      _connectingEndpointIds.remove(user.endpointId);
       _statusMessage = 'Could not connect to ${user.name}.';
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   Future<void> sendMessageToThread(String threadName, String text) async {
@@ -231,9 +240,23 @@ class ShellController extends ChangeNotifier {
             endpointId: ep.id,
             name: ep.name,
             isConnected: _chatService.isConnectedTo(ep.id),
+            isConnecting: _connectingEndpointIds.contains(ep.id),
           ),
         ),
       );
+    notifyListeners();
+  }
+
+  void _refreshNearbyList() {
+    for (int i = 0; i < _nearbyUsers.length; i++) {
+      final NearbyUser u = _nearbyUsers[i];
+      _nearbyUsers[i] = NearbyUser(
+        endpointId: u.endpointId,
+        name: u.name,
+        isConnected: _chatService.isConnectedTo(u.endpointId),
+        isConnecting: _connectingEndpointIds.contains(u.endpointId),
+      );
+    }
     notifyListeners();
   }
 
@@ -243,6 +266,7 @@ class ShellController extends ChangeNotifier {
       _threadEndpointMap[entry.value] = entry.key;
 
       // Auto-create a chat thread for newly connected peers.
+      final bool isNew = !_messagesByThread.containsKey(entry.value);
       _messagesByThread.putIfAbsent(entry.value, () {
         return <ChatMessage>[
           ChatMessage(
@@ -251,6 +275,14 @@ class ShellController extends ChangeNotifier {
           ),
         ];
       });
+      if (isNew) {
+        onPeerConnected?.call(entry.value);
+      }
+    }
+
+    // Clear connecting state for all now-connected peers.
+    for (final String id in connectedPeers.keys) {
+      _connectingEndpointIds.remove(id);
     }
 
     // Refresh nearby list with updated connection status.
@@ -261,6 +293,7 @@ class ShellController extends ChangeNotifier {
           endpointId: ep.id,
           name: ep.name,
           isConnected: _chatService.isConnectedTo(ep.id),
+          isConnecting: _connectingEndpointIds.contains(ep.id),
         ),
       );
     }
@@ -281,6 +314,13 @@ class ShellController extends ChangeNotifier {
     }
 
     _statusMessage = null;
+
+    // Auto-stop scanning once a peer is connected.
+    if (connectedPeers.isNotEmpty && _scanEnabled) {
+      _scanEnabled = false;
+      unawaited(_stopScan());
+    }
+
     notifyListeners();
   }
 

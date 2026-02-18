@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../infrastructure/ble/bluetooth_permission_service.dart';
+import '../infrastructure/nearby/connectivity_permission_service.dart';
 import '../infrastructure/nearby/nearby_connections_chat_service.dart';
 import 'controllers/app_flow_controller.dart';
 import 'controllers/shell_controller.dart';
@@ -20,8 +20,8 @@ class BlueTalkFlow extends StatefulWidget {
 
 class _BlueTalkFlowState extends State<BlueTalkFlow> {
   final AppFlowController _flowController = AppFlowController();
-  final BluetoothPermissionService _permissionService =
-      BluetoothPermissionService();
+  final ConnectivityPermissionService _permissionService =
+      ConnectivityPermissionService();
 
   late final NearbyConnectionsChatService _chatService =
       NearbyConnectionsChatService(username: 'BlueTalk User');

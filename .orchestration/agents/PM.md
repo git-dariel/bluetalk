@@ -9,7 +9,7 @@ Proposed → Architect Approved → Dev In Progress → Review → QA → Comple
 
 Responsibilities:
 
-- Prevent parallel BLE protocol changes
+- Prevent parallel transport protocol changes
 - Ensure encryption implemented before messaging
 - Track stability issues
 

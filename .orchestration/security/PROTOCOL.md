@@ -1,7 +1,12 @@
-# BlueTalk BLE Communication Protocol Specification
+# BlueTalk Nearby Communication Protocol Specification
 
 Version: 1.0
 Status: Draft
+
+Implementation Note:
+
+- This document specifies the target encrypted protocol.
+- Current production transport uses Nearby byte payload messaging while encryption re-integration is in progress.
 
 ---
 
@@ -9,7 +14,7 @@ Status: Draft
 
 ---
 
-BlueTalk is a peer-to-peer encrypted messaging protocol over BLE.
+BlueTalk targets peer-to-peer encrypted messaging over Google Nearby Connections.
 
 Security Goals:
 
@@ -20,32 +25,29 @@ Security Goals:
 
 Transport:
 
-- Bluetooth Low Energy (BLE)
-- GATT-based communication
+- Nearby Connections API
+- Device-to-device byte payload messaging
 
 ---
 
-2. BLE SERVICE DEFINITION
+2. TRANSPORT DEFINITION
 
 ---
 
-Primary Service UUID:
+Service ID:
 
-- BlueTalk Service UUID (to be defined)
+- `com.bluetalk.nearby`
 
-Characteristics:
+Payload Channels:
 
-1. Handshake Characteristic
+1. Handshake payload
    - Used for key exchange and session negotiation
-   - Write + Notify
 
-2. Message Characteristic
+2. Message payload
    - Used for encrypted message transfer
-   - Write + Notify
 
-3. Acknowledgment Characteristic
+3. Acknowledgment payload
    - Used for delivery confirmation
-   - Write
 
 ---
 
@@ -98,7 +100,7 @@ If confirmation MACs match:
 
 ---
 
-All messages MUST be encrypted using AES-GCM-256.
+All messages in the target protocol MUST be encrypted using AES-GCM-256.
 
 Message Packet:
 
@@ -120,13 +122,13 @@ Rules:
 
 ---
 
-5. MTU & FRAGMENTATION
+5. PAYLOAD SIZE & CHUNKING
 
 ---
 
-BLE MTU limits message size.
+Nearby payload size and transfer conditions can vary by device and channel.
 
-If encrypted payload > MTU:
+If encrypted payload exceeds the safe payload threshold:
 
 - Split into numbered fragments
 - Include:
@@ -145,7 +147,7 @@ All fragments must be received before decryption.
 - Session keys stored in memory only
 - Session expires after configurable timeout
 - New handshake required after disconnect
-- No plaintext fallback allowed
+- No plaintext fallback allowed in final enforced mode
 
 ---
 

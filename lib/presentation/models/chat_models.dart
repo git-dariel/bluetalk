@@ -6,11 +6,15 @@ class NearbyUser {
     required this.endpointId,
     required this.name,
     required this.isConnected,
+    this.isConnecting = false,
   });
 
   final String endpointId;
   final String name;
   final bool isConnected;
+
+  /// True while the outgoing connection attempt is in-flight.
+  final bool isConnecting;
 }
 
 @immutable

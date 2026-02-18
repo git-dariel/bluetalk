@@ -1,6 +1,6 @@
 # QA Agent – BlueTalk (Flutter)
 
-## BLE Testing
+## Transport Testing
 
 - Scan success
 - Scan timeout

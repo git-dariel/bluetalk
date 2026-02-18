@@ -52,16 +52,21 @@ class HomeTab extends StatelessWidget {
                   separatorBuilder: (_, __) => const SizedBox(height: 6),
                   itemBuilder: (BuildContext context, int index) {
                     final NearbyUser user = users[index];
+                    final bool busy = user.isConnecting;
                     return GestureDetector(
-                      onTap:
-                          user.isConnected ? null : () => onConnectUser(user),
-                      child: Container(
+                      onTap: (user.isConnected || busy)
+                          ? null
+                          : () => onConnectUser(user),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 8),
                         decoration: BoxDecoration(
                           borderRadius:
                               BorderRadius.circular(BlueTalkRadius.medium),
-                          color: const Color(0x40FFFFFF),
+                          color: busy
+                              ? const Color(0x60FFFFFF)
+                              : const Color(0x40FFFFFF),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -70,12 +75,24 @@ class HomeTab extends StatelessWidget {
                               radius: 20,
                               backgroundColor: user.isConnected
                                   ? Colors.green.withOpacity(0.25)
-                                  : Colors.grey.withOpacity(0.25),
-                              child: Text(
-                                user.name.substring(0, 1),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w700),
-                              ),
+                                  : busy
+                                      ? const Color(0xFF5A6C5E)
+                                          .withOpacity(0.15)
+                                      : Colors.grey.withOpacity(0.25),
+                              child: busy
+                                  ? const SizedBox(
+                                      width: 18,
+                                      height: 18,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Color(0xFF5A6C5E),
+                                      ),
+                                    )
+                                  : Text(
+                                      user.name.substring(0, 1),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                    ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
@@ -94,24 +111,29 @@ class HomeTab extends StatelessWidget {
                                   Text(
                                     user.isConnected
                                         ? 'Connected'
-                                        : 'Tap to connect',
+                                        : busy
+                                            ? 'Connecting...'
+                                            : 'Tap to connect',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: user.isConnected
                                           ? Colors.green
-                                          : const Color(0xFF5A6C5E),
+                                          : busy
+                                              ? const Color(0xFF5A6C5E)
+                                              : const Color(0xFF5A6C5E),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            Icon(
-                              user.isConnected ? Icons.link : Icons.bluetooth,
-                              color: user.isConnected
-                                  ? Colors.green
-                                  : const Color(0xFF5A6C5E),
-                              size: 22,
-                            ),
+                            if (!busy)
+                              Icon(
+                                user.isConnected ? Icons.link : Icons.bluetooth,
+                                color: user.isConnected
+                                    ? Colors.green
+                                    : const Color(0xFF5A6C5E),
+                                size: 22,
+                              ),
                           ],
                         ),
                       ),

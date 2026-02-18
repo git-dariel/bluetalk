@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../design/tokens.dart';
 
@@ -41,18 +40,18 @@ class PermissionScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(30, 80, 30, 30),
               child: Column(
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'bluetalk.',
-                    style: GoogleFonts.imFellEnglish(
-                      fontSize: 100,
+                    style: TextStyle(
+                      fontFamily: 'IMFellEnglish',
+                      fontSize: 80,
                       fontStyle: FontStyle.italic,
                       color: BlueTalkColors.primaryText,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const Text(
                     'Chat nearby. No internet needed.',
-                    style: TextStyle(fontSize: 18, color: Color(0xFF27443E)),
+                    style: TextStyle(fontSize: 15, color: Color(0xFF27443E)),
                   ),
                   const Spacer(),
                   ClipRRect(
@@ -100,9 +99,10 @@ class PermissionScreen extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () => onContinue(),
-                                child: Text(
+                                child: const Text(
                                   'Allow & Continue',
-                                  style: GoogleFonts.poppins(
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
                                     fontSize: 17,
                                     fontWeight: FontWeight.w400,
                                   ),

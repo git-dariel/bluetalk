@@ -84,11 +84,11 @@ class NearbyConnectionsChatService {
   }
 
   // ---- Permissions ----
-  /// Permissions are handled by BluetoothPermissionService before this
+  /// Permissions are handled by ConnectivityPermissionService before this
   /// service starts. This is a no-op placeholder for compatibility.
   Future<bool> ensurePermissions() async {
     // All BLE, location, and WiFi permissions are requested by
-    // BluetoothPermissionService.requestBluetoothPermissions().
+    // ConnectivityPermissionService.requestConnectivityPermissions().
     return true;
   }
 

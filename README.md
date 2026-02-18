@@ -1,14 +1,19 @@
 # BlueTalk
 
-BlueTalk is a Bluetooth Low Energy (BLE) peer-to-peer messaging app built with Flutter. It focuses on secure, offline-first communication using encrypted sessions and clean architecture boundaries.
+BlueTalk is an offline peer-to-peer messaging app built with Flutter and Google Nearby Connections. It focuses on direct nearby communication, clean architecture boundaries, and security hardening in progress.
 
 ## Highlights
 
-- Encrypted messaging with AES-GCM
-- Ephemeral session keys derived via ECDH
-- Offline-first BLE communication
+- Nearby peer discovery and direct device-to-device messaging
+- Offline-first communication with no internet required
+- Transport via Google Nearby Connections API
 - Clean Architecture separation of concerns
-- Battery-aware BLE scanning and connection handling
+- Battery-aware scanning, advertising, and connection handling
+
+## Current Security Status
+
+- Transport and real-time messaging are fully working over Nearby Connections.
+- End-to-end encryption migration is in progress and documented in `.orchestration/TODO.md`.
 
 ## Architecture Diagram
 
@@ -26,7 +31,7 @@ flowchart LR
 	end
 	subgraph Data
 		Repos[Repositories]
-		BLE[BLE Infrastructure]
+		Nearby[Nearby Connections Infrastructure]
 		Crypto[Crypto Services]
 	end
 	subgraph Security
@@ -34,13 +39,13 @@ flowchart LR
 	end
 
 	UI --> App --> UseCases --> Entities
-	App --> Repos --> BLE --> Device[Nearby Device]
-	Repos --> Crypto --> BLE
+	App --> Repos --> Nearby --> Device[Nearby Device]
+	Repos --> Crypto --> Nearby
 	Crypto --> Storage
 
 	classDef layer fill:#1f2933,stroke:#4b5563,color:#e5e7eb;
 	classDef accent fill:#0f766e,stroke:#0ea5a4,color:#f0fdfa;
-	class UI,App,UseCases,Entities,Repos,BLE,Crypto,Storage layer;
+	class UI,App,UseCases,Entities,Repos,Nearby,Crypto,Storage layer;
 	class Device accent;
 ```
 
